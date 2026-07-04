@@ -1,653 +1,916 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="th">
 <head>
-  <meta charset="UTF-8">
-  <title>For My Dearest Richard</title>
-  <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Lora:ital@0;1&display=swap" rel="stylesheet">
-  <style>
-    body {
-      margin: 0;
-      padding: 0;
-      background: linear-gradient(135deg, #ffe6f2, #f9e6ff);
-      font-family: 'Lora', serif;
-      min-height: 100vh;
-      overflow-x: hidden;
-    }
-    
-    .container {
-      position: relative;
-      width: 100%;
-      min-height: 100vh;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      padding: 50px 0;
-    }
-    
-    #garden {
-      position: fixed;
-      bottom: -50px;
-      width: 100%;
-      height: 200px;
-      display: flex;
-      justify-content: center;
-      z-index: 1;
-    }
-    
-    .tulip {
-      position: relative;
-      width: 60px;
-      height: 200px;
-      margin: 0 15px;
-      transform-origin: bottom center;
-      animation: sway 6s ease-in-out infinite alternate;
-    }
-    
-    .tulip:nth-child(2n) {
-      animation-delay: 0.5s;
-    }
-    
-    .tulip:nth-child(3n) {
-      animation-delay: 1s;
-    }
-    
-    .stem {
-      position: absolute;
-      bottom: 0;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 8px;
-      height: 120px;
-      background: linear-gradient(to top, #2e8b57, #3cb371);
-      border-radius: 4px;
-    }
-    
-    .flower {
-      position: absolute;
-      bottom: 110px;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 50px;
-      height: 60px;
-      background: #e4e2e2;
-      border-radius: 50% 50% 0 0;
-      cursor: pointer;
-      transition: all 0.3s ease;
-    }
-    
-    .tulip:nth-child(2) .flower {
-      background: #e4e2e2;
-    }
-    
-    .tulip:nth-child(3) .flower {
-      background: #1c91ff;
-    }
-    
-    .tulip:nth-child(4) .flower {
-      background: #e4e2e2;
-    }
-    
-    .tulip:nth-child(5) .flower {
-      background: #079cff;
-    }
-    
-    .petals {
-      position: absolute;
-      width: 100%;
-      height: 100%;
-    }
-    
-    .petal {
-      position: absolute;
-      width: 50px;
-      height: 60px;
-      background: inherit;
-      border-radius: 50% 50% 0 0;
-      transform-origin: bottom center;
-    }
-    
-    .petal:nth-child(1) {
-      transform: rotate(-20deg);
-    }
-    
-    .petal:nth-child(2) {
-      transform: rotate(20deg);
-    }
-    
-    .leaf {
-      position: absolute;
-      bottom: 60px;
-      width: 30px;
-      height: 20px;
-      background: #3cb371;
-      border-radius: 50% 50% 0 50%;
-      transform: rotate(45deg);
-    }
-    
-    .tulip:nth-child(odd) .leaf {
-      left: -10px;
-    }
-    
-    .tulip:nth-child(even) .leaf {
-      right: -10px;
-      transform: rotate(-45deg);
-      border-radius: 50% 50% 50% 0;
-    }
-    
-    #message {
-      display: none;
-      max-width: 600px;
-      text-align: center;
-      background: rgba(255, 255, 255, 0.9);
-      padding: 50px;
-      border-radius: 25px;
-      box-shadow: 0 0 40px rgba(230, 0, 92, 0.5);
-      transform: scale(0.1);
-      z-index: 10;
-      position: relative;
-      margin: 20px;
-    }
-    
-    .content-container {
-      max-height: 70vh;
-      overflow-y: auto;
-      padding: 20px 10px;
-      margin: 10px 0;
-      position: relative;
-    }
-    
-    #message.visible {
-      display: block;
-      animation: popIn 1s ease-out forwards;
-    }
-    
-    h1 {
-      font-family: 'Great Vibes', cursive;
-      color: #e6005c;
-      font-size: 4em;
-      margin-bottom: 30px;
-      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
-    }
-    
-    p {
-      font-size: 1.5em;
-      color: #333;
-      line-height: 1.8;
-      margin-bottom: 30px;
-    }
-    
-    .heart {
-      display: inline-block;
-      color: #e6005c;
-      animation: beat 1s infinite alternate;
-    }
-    
-    .floating-petals {
-      position: fixed;
-      width: 100%;
-      height: 100%;
-      pointer-events: none;
-      z-index: 2;
-    }
-    
-    .floating-petal {
-      position: absolute;
-      width: 15px;
-      height: 15px;
-      background: #ffcce0;
-      border-radius: 50% 0 50% 0;
-      animation: float 10s linear infinite;
-      opacity: 0.7;
-    }
-    
-    .signature {
-      font-family: 'Great Vibes', cursive;
-      font-size: 2em;
-      color: #e6005c;
-      margin-top: 20px;
-    }
-    
-    .close-btn {
-      position: absolute;
-      top: 20px;
-      right: 20px;
-      width: 30px;
-      height: 30px;
-      background: none;
-      border: none;
-      font-size: 1.5em;
-      color: #e6005c;
-      cursor: pointer;
-    }
-    
-    /* Falling Hearts */
-    .heart-container {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      pointer-events: none;
-      z-index: 100;
-      display: none;
-    }
-    
-    .heart-container.active {
-      display: block;
-    }
-    
-    .falling-heart {
-      position: absolute;
-      display: inline-block;
-      width: 20px;
-      height: 20px;
-      top: -20px;
-      background-size: contain;
-      background-repeat: no-repeat;
-      background-position: center;
-      animation: fall linear forwards;
-    }
-    
-    /* Heart shape using CSS */
-    .heart-shape {
-      position: relative;
-      width: 20px;
-      height: 18px;
-    }
-    
-    .heart-shape:before,
-    .heart-shape:after {
-      content: "";
-      position: absolute;
-      top: 0;
-      width: 10px;
-      height: 16px;
-      border-radius: 50px 50px 0 0;
-      background: red;
-    }
-    
-    .heart-shape:before {
-      left: 10px;
-      transform: rotate(-45deg);
-      transform-origin: 0 100%;
-    }
-    
-    .heart-shape:after {
-      left: 0;
-      transform: rotate(45deg);
-      transform-origin: 100% 100%;
-    }
-    
-    .pink-heart .heart-shape:before,
-    .pink-heart .heart-shape:after {
-      background: #ff80b3;
-    }
-    
-    .red-heart .heart-shape:before,
-    .red-heart .heart-shape:after {
-      background: #e6005c;
-    }
-    
-    .white-heart .heart-shape:before,
-    .white-heart .heart-shape:after {
-      background: white;
-    }
-    
-    @keyframes popIn {
-      0% {
-        transform: scale(0.1);
-        opacity: 0;
-      }
-      70% {
-        transform: scale(1.1);
-      }
-      100% {
-        transform: scale(1);
-        opacity: 1;
-      }
-    }
-    
-    @keyframes sway {
-      0% {
-        transform: rotate(-3deg);
-      }
-      100% {
-        transform: rotate(3deg);
-      }
-    }
-    
-    @keyframes beat {
-      0% {
-        transform: scale(1);
-      }
-      100% {
-        transform: scale(1.2);
-      }
-    }
-    
-    @keyframes float {
-      0% {
-        transform: translateY(0) translateX(0) rotate(0deg);
-        opacity: 0;
-      }
-      10% {
-        opacity: 0.7;
-      }
-      100% {
-        transform: translateY(-100vh) translateX(100px) rotate(720deg);
-        opacity: 0;
-      }
-    }
-    
-    @keyframes fall {
-      0% {
-        transform: translateY(0) rotate(0deg) scale(1);
-      }
-      100% {
-        transform: translateY(calc(100vh + 20px)) rotate(360deg) scale(0.8);
-        opacity: 0;
-      }
-    }
-    
-    #main-tulip {
-      position: relative;
-      width: 120px;
-      height: 400px;
-      z-index: 5;
-      cursor: pointer;
-      transform-origin: bottom center;
-      animation: gentle-sway 3s ease-in-out infinite alternate;
-    }
-    
-    #main-tulip .stem {
-      height: 240px;
-      width: 15px;
-    }
-    
-    #main-tulip .flower {
-      bottom: 230px;
-      width: 100px;
-      height: 130px;
-    }
-    
-    #main-tulip .petal {
-      width: 100px;
-      height: 130px;
-    }
-    
-    #main-tulip .leaf {
-      width: 60px;
-      height: 30px;
-      bottom: 140px;
-    }
-    
-    @keyframes gentle-sway {
-      0% {
-        transform: rotate(-1deg);
-      }
-      100% {
-        transform: rotate(1deg);
-      }
-    }
-    
-    /* Scrollbar styling */
-    .content-container::-webkit-scrollbar {
-      width: 8px;
-    }
-    
-    .content-container::-webkit-scrollbar-track {
-      background: rgba(255, 204, 224, 0.2);
-      border-radius: 10px;
-    }
-    
-    .content-container::-webkit-scrollbar-thumb {
-      background: rgba(230, 0, 92, 0.5);
-      border-radius: 10px;
-    }
-    
-    .content-container::-webkit-scrollbar-thumb:hover {
-      background: rgba(230, 0, 92, 0.8);
-    }
-    
-    /* Additional content for scrolling */
-    .poem {
-      font-style: italic;
-      margin: 30px 0;
-      padding: 15px;
-      background: rgba(255, 255, 255, 0.5);
-      border-radius: 15px;
-    }
-    
-    .memories {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      gap: 15px;
-      margin: 30px 0;
-    }
-    
-    .memory {
-      width: 120px;
-      height: 120px;
-      background: #ffcce0;
-      border-radius: 10px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 0.8em;
-      padding: 10px;
-      text-align: center;
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    }
-    
-    .memory:nth-child(2n) {
-      background: #ffe6f2;
-    }
-    
-    .memory:nth-child(3n) {
-      background: #ffd6e6;
-    }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>For You, My Love</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Cormorant+Garamond:ital,wght@0,300;1,300;1,500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --pink-deep: #c0536a;
+    --pink-mid: #e8789a;
+    --pink-light: #f5b8cc;
+    --pink-pale: #fde8ef;
+    --cream: #fff8f5;
+    --green-deep: #3a6b35;
+    --green-mid: #5a9e52;
+    --green-light: #8dcc82;
+    --gold: #d4a96a;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: linear-gradient(160deg, #1a0a14 0%, #2d1020 35%, #1f0d1a 70%, #0e0608 100%);
+    min-height: 100vh;
+    overflow: hidden;
+    font-family: 'Cormorant Garamond', serif;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: default;
+  }
+
+  /* Stars background */
+  .stars-container {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 0;
+  }
+  .star {
+    position: absolute;
+    background: white;
+    border-radius: 50%;
+    animation: starTwinkle var(--dur, 3s) ease-in-out infinite var(--delay, 0s);
+  }
+  @keyframes starTwinkle {
+    0%, 100% { opacity: var(--min-op, 0.2); transform: scale(1); }
+    50% { opacity: var(--max-op, 0.9); transform: scale(1.4); }
+  }
+
+  /* Floating petals background */
+  .bg-petals {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 1;
+    overflow: hidden;
+  }
+  .bg-petal {
+    position: absolute;
+    top: -60px;
+    width: var(--size, 18px);
+    height: calc(var(--size, 18px) * 1.4);
+    background: radial-gradient(ellipse at 40% 30%, #f5b8cc, #e8789a88);
+    border-radius: 60% 40% 60% 40% / 50% 50% 50% 50%;
+    opacity: 0;
+    animation: bgPetalFall var(--fall-dur, 12s) ease-in infinite var(--fall-delay, 0s);
+    filter: blur(0.5px);
+  }
+  @keyframes bgPetalFall {
+    0% { opacity: 0; transform: translateY(0) translateX(0) rotate(0deg); }
+    10% { opacity: 0.6; }
+    90% { opacity: 0.3; }
+    100% { opacity: 0; transform: translateY(110vh) translateX(var(--drift, 80px)) rotate(var(--spin, 360deg)); }
+  }
+
+  /* Main scene */
+  .scene {
+    position: relative;
+    z-index: 10;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-end;
+    width: 100vw;
+    height: 100vh;
+  }
+
+  /* Ground */
+  .ground {
+    position: absolute;
+    bottom: 0;
+    left: 0; right: 0;
+    height: 140px;
+    background: radial-gradient(ellipse 80% 100% at 50% 100%, #2d1a08 0%, #1a0e04 60%, transparent 100%);
+    z-index: 2;
+  }
+  .ground-glow {
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 300px;
+    height: 80px;
+    background: radial-gradient(ellipse, #8dcc8222 0%, transparent 70%);
+    animation: groundPulse 4s ease-in-out infinite;
+  }
+  @keyframes groundPulse {
+    0%, 100% { opacity: 0.5; transform: translateX(-50%) scaleX(1); }
+    50% { opacity: 1; transform: translateX(-50%) scaleX(1.2); }
+  }
+
+  /* SVG Container */
+  .flower-svg-wrap {
+    position: absolute;
+    bottom: 60px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 5;
+    width: 420px;
+    height: 580px;
+  }
+
+  /* Stem SVG */
+  #stemPath {
+    stroke-dasharray: 600;
+    stroke-dashoffset: 600;
+    animation: drawStem 3s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.5s forwards;
+  }
+  @keyframes drawStem {
+    to { stroke-dashoffset: 0; }
+  }
+
+  #stemPath2 {
+    stroke-dasharray: 80;
+    stroke-dashoffset: 80;
+    animation: drawStem2 1s ease-out 2.5s forwards;
+  }
+  @keyframes drawStem2 {
+    to { stroke-dashoffset: 0; }
+  }
+
+  /* Leaves */
+  .leaf-group {
+    transform-origin: center bottom;
+    opacity: 0;
+    transform: scale(0) rotate(-20deg);
+  }
+  #leaf1 { animation: leafGrow 1.2s cubic-bezier(0.34, 1.56, 0.64, 1) 3s forwards; }
+  #leaf2 { animation: leafGrow 1.2s cubic-bezier(0.34, 1.56, 0.64, 1) 3.4s forwards; }
+  #leaf3 { animation: leafGrow 1s cubic-bezier(0.34, 1.56, 0.64, 1) 3.8s forwards; }
+  #leaf4 { animation: leafGrow 1s cubic-bezier(0.34, 1.56, 0.64, 1) 4.2s forwards; }
+
+  @keyframes leafGrow {
+    0% { opacity: 0; transform: scale(0) rotate(-20deg); }
+    60% { opacity: 1; transform: scale(1.1) rotate(3deg); }
+    100% { opacity: 1; transform: scale(1) rotate(0deg); }
+  }
+
+  /* Leaf sway after appearing */
+  .leaf-sway-left { animation: leafGrow 1.2s cubic-bezier(0.34, 1.56, 0.64, 1) 3s forwards, leafSwayL 5s ease-in-out 4.5s infinite; }
+  .leaf-sway-right { animation: leafGrow 1.2s cubic-bezier(0.34, 1.56, 0.64, 1) 3.4s forwards, leafSwayR 5s ease-in-out 4.9s infinite; }
+  .leaf-sway-left2 { animation: leafGrow 1s cubic-bezier(0.34, 1.56, 0.64, 1) 3.8s forwards, leafSwayL 6s ease-in-out 5.2s infinite; }
+  .leaf-sway-right2 { animation: leafGrow 1s cubic-bezier(0.34, 1.56, 0.64, 1) 4.2s forwards, leafSwayR 6s ease-in-out 5.6s infinite; }
+
+  @keyframes leafSwayL {
+    0%, 100% { transform: scale(1) rotate(0deg); }
+    30% { transform: scale(1.02) rotate(-6deg); }
+    70% { transform: scale(1.02) rotate(4deg); }
+  }
+  @keyframes leafSwayR {
+    0%, 100% { transform: scale(1) rotate(0deg); }
+    30% { transform: scale(1.02) rotate(6deg); }
+    70% { transform: scale(1.02) rotate(-4deg); }
+  }
+
+  /* Bud */
+  #budGroup {
+    opacity: 0;
+    animation: budAppear 1s ease-out 4.8s forwards;
+  }
+  @keyframes budAppear {
+    0% { opacity: 0; transform: scale(0) translateY(20px); }
+    100% { opacity: 1; transform: scale(1) translateY(0); }
+  }
+
+  /* Petals blooming */
+  .petal-outer {
+    transform-origin: 210px 140px;
+    opacity: 0;
+    transform: scale(0) rotate(var(--base-rot, 0deg));
+    animation: petalBloom 1.4s cubic-bezier(0.34, 1.45, 0.64, 1) var(--bloom-delay, 6s) forwards,
+               petalSway 4s ease-in-out calc(var(--bloom-delay, 6s) + 1.5s) infinite;
+  }
+  @keyframes petalBloom {
+    0% { opacity: 0; transform: scale(0) rotate(var(--base-rot, 0deg)); }
+    50% { opacity: 1; transform: scale(1.15) rotate(var(--base-rot, 0deg)); }
+    100% { opacity: 1; transform: scale(1) rotate(var(--base-rot, 0deg)); }
+  }
+  @keyframes petalSway {
+    0%, 100% { transform: scale(1) rotate(var(--base-rot, 0deg)); }
+    50% { transform: scale(1.02) rotate(calc(var(--base-rot, 0deg) + var(--sway-dir, 3deg))); }
+  }
+
+  .petal-inner {
+    transform-origin: 210px 148px;
+    opacity: 0;
+    transform: scale(0) rotate(var(--base-rot, 0deg));
+    animation: petalBloom 1.2s cubic-bezier(0.34, 1.5, 0.64, 1) var(--bloom-delay-inner, 6.5s) forwards,
+               petalSwayInner 3.5s ease-in-out calc(var(--bloom-delay-inner, 6.5s) + 1.2s) infinite;
+  }
+  @keyframes petalSwayInner {
+    0%, 100% { transform: scale(1) rotate(var(--base-rot, 0deg)); }
+    50% { transform: scale(1.03) rotate(calc(var(--base-rot, 0deg) - var(--sway-dir, 2deg))); }
+  }
+
+  /* Center */
+  #flowerCenter {
+    opacity: 0;
+    transform-origin: 210px 140px;
+    animation: centerPop 0.8s cubic-bezier(0.34, 1.8, 0.64, 1) 8s forwards;
+  }
+  @keyframes centerPop {
+    0% { opacity: 0; transform: scale(0); }
+    70% { transform: scale(1.2); }
+    100% { opacity: 1; transform: scale(1); }
+  }
+
+  /* Stamens */
+  .stamen {
+    opacity: 0;
+    animation: stamenPop 0.5s cubic-bezier(0.34, 1.8, 0.64, 1) var(--st-delay, 8.2s) forwards;
+  }
+  @keyframes stamenPop {
+    0% { opacity: 0; transform-origin: 210px 143px; transform: scaleY(0); }
+    100% { opacity: 1; transform-origin: 210px 143px; transform: scaleY(1); }
+  }
+
+  /* Whole flower gentle rotation */
+  #flowerHead {
+    transform-origin: 210px 140px;
+    animation: flowerFloat 6s ease-in-out 9s infinite;
+  }
+  @keyframes flowerFloat {
+    0%, 100% { transform: rotate(-2deg) translateY(0px); }
+    25% { transform: rotate(2deg) translateY(-4px); }
+    50% { transform: rotate(-1deg) translateY(-7px); }
+    75% { transform: rotate(3deg) translateY(-3px); }
+  }
+
+  /* Sparkles */
+  .sparkle {
+    position: absolute;
+    pointer-events: none;
+    opacity: 0;
+    animation: sparkleAnim var(--sp-dur, 2s) ease-in-out var(--sp-delay, 8s) infinite;
+  }
+  @keyframes sparkleAnim {
+    0% { opacity: 0; transform: scale(0) rotate(0deg); }
+    30% { opacity: 1; transform: scale(1) rotate(45deg); }
+    70% { opacity: 0.8; transform: scale(0.8) rotate(90deg); }
+    100% { opacity: 0; transform: scale(0) rotate(180deg); }
+  }
+
+  /* Hearts floating */
+  .heart {
+    position: absolute;
+    pointer-events: none;
+    color: var(--pink-light);
+    font-size: var(--heart-size, 14px);
+    opacity: 0;
+    animation: heartFloat var(--h-dur, 4s) ease-out var(--h-delay, 9s) infinite;
+  }
+  @keyframes heartFloat {
+    0% { opacity: 0; transform: translateY(0) translateX(0) scale(0.5); }
+    20% { opacity: 0.8; transform: translateY(-30px) translateX(10px) scale(1); }
+    80% { opacity: 0.4; }
+    100% { opacity: 0; transform: translateY(-120px) translateX(var(--h-drift, 20px)) scale(0.3); }
+  }
+
+  /* Text */
+  .message-wrap {
+    position: fixed;
+    bottom: 0; left: 0; right: 0;
+    z-index: 20;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-bottom: 28px;
+    pointer-events: none;
+  }
+  .message-line {
+    font-family: 'Playfair Display', serif;
+    font-style: italic;
+    font-size: clamp(1.1rem, 3vw, 1.7rem);
+    letter-spacing: 0.12em;
+    opacity: 0;
+    text-align: center;
+  }
+  .msg1 {
+    color: #f5b8cc;
+    text-shadow: 0 0 30px #e8789a88, 0 2px 8px #00000066;
+    font-weight: 700;
+    font-size: clamp(1.4rem, 4vw, 2.2rem);
+    animation: msgFade 2s ease-out 8.5s forwards;
+  }
+  .msg2 {
+    color: #fde8efcc;
+    font-weight: 300;
+    text-shadow: 0 0 20px #e8789a55;
+    margin-top: 6px;
+    animation: msgFade 2s ease-out 9.2s forwards;
+  }
+  .msg3 {
+    color: var(--gold);
+    font-family: 'Cormorant Garamond', serif;
+    font-weight: 300;
+    font-size: clamp(0.85rem, 2vw, 1.1rem);
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    margin-top: 10px;
+    text-shadow: 0 0 15px #d4a96a66;
+    animation: msgFade 2s ease-out 9.9s forwards;
+  }
+  @keyframes msgFade {
+    0% { opacity: 0; transform: translateY(18px); }
+    100% { opacity: 1; transform: translateY(0); }
+  }
+
+  /* Glow aura around flower */
+  #flowerAura {
+    opacity: 0;
+    animation: auraGlow 3s ease-out 7.5s forwards;
+  }
+  @keyframes auraGlow {
+    0% { opacity: 0; }
+    100% { opacity: 1; }
+  }
+  #auraCircle {
+    animation: auraPulse 4s ease-in-out 10s infinite;
+  }
+  @keyframes auraPulse {
+    0%, 100% { r: 72; opacity: 0.18; }
+    50% { r: 82; opacity: 0.32; }
+  }
+
+  /* Dew drops on petals */
+  .dew {
+    opacity: 0;
+    animation: dewAppear 1s ease-out var(--dew-delay, 8.5s) forwards;
+  }
+  @keyframes dewAppear {
+    0% { opacity: 0; r: 0; }
+    60% { opacity: 0.8; }
+    100% { opacity: 0.65; r: var(--dew-r, 3); }
+  }
+
+  /* Vein lines on petals */
+  .vein {
+    stroke-dasharray: 30;
+    stroke-dashoffset: 30;
+    animation: veinDraw 1s ease-out var(--vein-delay, 7s) forwards;
+  }
+  @keyframes veinDraw {
+    to { stroke-dashoffset: 0; }
+  }
+
+  /* Small buds on sides */
+  .side-bud {
+    opacity: 0;
+    transform-origin: center bottom;
+    transform: scale(0);
+    animation: sideBudGrow 1s cubic-bezier(0.34, 1.4, 0.64, 1) var(--sb-delay, 5.5s) forwards;
+  }
+  @keyframes sideBudGrow {
+    0% { opacity: 0; transform: scale(0); }
+    100% { opacity: 1; transform: scale(1); }
+  }
+</style>
 </head>
 <body>
-  <div class="container">
-    <!-- Floating petals -->
-    <div class="floating-petals" id="petals-container"></div>
-    
-    <!-- Falling hearts container -->
-    <div class="heart-container" id="heart-container"></div>
-    
-    <!-- Main clickable tulip -->
-    <div id="main-tulip" onclick="showMessage()">
-      <div class="stem"></div>
-      <div class="flower">
-        <div class="petals">
-          <div class="petal"></div>
-          <div class="petal"></div>
-        </div>
-      </div>
-      <div class="leaf"></div>
-    </div>
-    
-    <!-- Love message -->
-    <div id="message">
-      <button class="close-btn" onclick="closeMessage()">&times;</button>
-      <h1>คนอ่านน่ารักที่สุด</h1>
-      
-      <div class="content-container">
-        <p>
-          ผมรักพี่มากนะค้าบ ไม่ว่าจะเจออะไร ผมก็จะอยู่ข้างพี่เสมอ<br>
-          สำหรับผม พี่คือคนสำคัญที่สุด และผมก็รักพี่มากจริง ๆ ค้าบ<br>
-          
-        </p>
-        
-        <p>
-          แค่มีพี่อยู่ในชีวิต ผมก็มีความสุขแล้วครับ ผมรักพี่นะ<br>
-        </p>
-        
-        <div class="poem">
-            รักพี่น้าา รักพี่น้าา เห็นเครียดด อย่าเครียดเลย คนสวยผม 
-        </div>
-        
-        <p>
-          อย่าคิดมากเลยน้าา  เนี่ยๆๆไม่ยิ้มเลยย ทำหน้ามุ้ยเลยย ยิ้มหน่อยย คนสวยของผม<br>
-        </p>
-        
-        <p>
-          รักพี่น้าา รักที่สุดในโลกก<br>
-          <span class="heart">❤</span>
-        </p>
-        
-        <div class="signature">Love you por</div>
-      </div>
-    </div>
-    
-    <!-- Garden of tulips -->
-    <div id="garden">
-      <div class="tulip">
-        <div class="stem"></div>
-        <div class="flower">
-          <div class="petals">
-            <div class="petal"></div>
-            <div class="petal"></div>
-          </div>
-        </div>
-        <div class="leaf"></div>
-      </div>
-      <div class="tulip">
-        <div class="stem"></div>
-        <div class="flower">
-          <div class="petals">
-            <div class="petal"></div>
-            <div class="petal"></div>
-          </div>
-        </div>
-        <div class="leaf"></div>
-      </div>
-      <div class="tulip">
-        <div class="stem"></div>
-        <div class="flower">
-          <div class="petals">
-            <div class="petal"></div>
-            <div class="petal"></div>
-          </div>
-        </div>
-        <div class="leaf"></div>
-      </div>
-      <div class="tulip">
-        <div class="stem"></div>
-        <div class="flower">
-          <div class="petals">
-            <div class="petal"></div>
-            <div class="petal"></div>
-          </div>
-        </div>
-        <div class="leaf"></div>
-      </div>
-      <div class="tulip">
-        <div class="stem"></div>
-        <div class="flower">
-          <div class="petals">
-            <div class="petal"></div>
-            <div class="petal"></div>
-          </div>
-        </div>
-        <div class="leaf"></div>
-      </div>
-    </div>
+
+<!-- Audio Background Music -->
+<audio id="bgMusic" preload="auto" autoplay muted loop>
+  <source src="ost-sdfofficial-mv_yaKLmOyv.mp3" type="audio/mpeg">
+</audio>
+
+<!-- Stars -->
+<div class="stars-container" id="starsContainer"></div>
+
+<!-- Background petals -->
+<div class="bg-petals" id="bgPetals"></div>
+
+<!-- Main Scene -->
+<div class="scene">
+  <div class="ground">
+    <div class="ground-glow"></div>
   </div>
+
+  <!-- Main SVG -->
+  <div class="flower-svg-wrap">
+    <svg width="420" height="580" viewBox="0 0 420 580" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <!-- Stem gradient -->
+        <linearGradient id="stemGrad" x1="0" y1="0" x2="1" y2="0">
+          <stop offset="0%" stop-color="#2d5228"/>
+          <stop offset="40%" stop-color="#5a9e52"/>
+          <stop offset="100%" stop-color="#3a6b35"/>
+        </linearGradient>
+        <!-- Leaf gradients -->
+        <radialGradient id="leafGrad1" cx="30%" cy="40%" r="65%">
+          <stop offset="0%" stop-color="#8dcc82"/>
+          <stop offset="60%" stop-color="#5a9e52"/>
+          <stop offset="100%" stop-color="#2d5228"/>
+        </radialGradient>
+        <radialGradient id="leafGrad2" cx="70%" cy="40%" r="65%">
+          <stop offset="0%" stop-color="#8dcc82"/>
+          <stop offset="60%" stop-color="#5a9e52"/>
+          <stop offset="100%" stop-color="#2d5228"/>
+        </radialGradient>
+        <!-- Petal gradients -->
+        <radialGradient id="petalOuter1" cx="50%" cy="20%" r="80%">
+          <stop offset="0%" stop-color="#fde8ef"/>
+          <stop offset="45%" stop-color="#f5b8cc"/>
+          <stop offset="100%" stop-color="#c0536a"/>
+        </radialGradient>
+        <radialGradient id="petalOuter2" cx="50%" cy="20%" r="80%">
+          <stop offset="0%" stop-color="#fde8ef"/>
+          <stop offset="50%" stop-color="#eda0ba"/>
+          <stop offset="100%" stop-color="#b84a61"/>
+        </radialGradient>
+        <radialGradient id="petalInnerGrad" cx="50%" cy="25%" r="75%">
+          <stop offset="0%" stop-color="#fff0f5"/>
+          <stop offset="40%" stop-color="#f9c8d8"/>
+          <stop offset="100%" stop-color="#d4607a"/>
+        </radialGradient>
+        <!-- Center gradient -->
+        <radialGradient id="centerGrad" cx="40%" cy="35%" r="65%">
+          <stop offset="0%" stop-color="#ffe066"/>
+          <stop offset="50%" stop-color="#d4a96a"/>
+          <stop offset="100%" stop-color="#8a5e2a"/>
+        </radialGradient>
+        <!-- Aura glow -->
+        <radialGradient id="auraGrad" cx="50%" cy="50%" r="50%">
+          <stop offset="0%" stop-color="#f5b8cc" stop-opacity="0.35"/>
+          <stop offset="60%" stop-color="#e8789a" stop-opacity="0.12"/>
+          <stop offset="100%" stop-color="#e8789a" stop-opacity="0"/>
+        </radialGradient>
+        <!-- Dew drop -->
+        <radialGradient id="dewGrad" cx="30%" cy="30%" r="70%">
+          <stop offset="0%" stop-color="white" stop-opacity="0.95"/>
+          <stop offset="100%" stop-color="#f5b8cc" stop-opacity="0.4"/>
+        </radialGradient>
+        <!-- Leaf sheen -->
+        <linearGradient id="leafSheen" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="white" stop-opacity="0.25"/>
+          <stop offset="100%" stop-color="white" stop-opacity="0"/>
+        </linearGradient>
+        <filter id="petalGlow">
+          <feGaussianBlur stdDeviation="4" result="blur"/>
+          <feComposite in="SourceGraphic" in2="blur" operator="over"/>
+        </filter>
+        <filter id="softGlow">
+          <feGaussianBlur stdDeviation="6" result="blur"/>
+          <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+        </filter>
+        <filter id="stemGlow">
+          <feGaussianBlur stdDeviation="2" result="blur"/>
+          <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+        </filter>
+      </defs>
+
+      <!-- STEM -->
+      <!-- Main stem with gentle S-curve -->
+      <path id="stemPath"
+        d="M210 570 C208 530, 202 490, 205 450 C208 410, 218 380, 212 340 C206 300, 198 270, 205 230 C212 190, 216 170, 210 145"
+        stroke="url(#stemGrad)" stroke-width="8" stroke-linecap="round"
+        fill="none" filter="url(#stemGlow)"/>
+      <!-- Stem highlight -->
+      <path
+        d="M211 570 C210 530, 204 490, 207 450 C210 410, 218 382, 213 342 C207 302, 200 272, 207 232 C214 192, 217 172, 211 147"
+        stroke="#8dcc8255" stroke-width="2.5" stroke-linecap="round"
+        fill="none"/>
+      <!-- Branch for side bud left -->
+      <path id="stemPath2"
+        d="M206 310 C190 295, 170 290, 158 278"
+        stroke="url(#stemGrad)" stroke-width="5" stroke-linecap="round" fill="none"/>
+      <!-- Branch for side bud right -->
+      <path
+        style="stroke-dasharray:70;stroke-dashoffset:70;animation:drawStem2 1s ease-out 2.8s forwards"
+        d="M210 360 C226 345, 245 342, 258 332"
+        stroke="url(#stemGrad)" stroke-width="5" stroke-linecap="round" fill="none"/>
+
+      <!-- LEAVES -->
+      <!-- Leaf 1 - large left lower -->
+      <g id="leaf1" class="leaf-group leaf-sway-left" style="transform-origin:205px 400px">
+        <path d="M205 400 C185 375, 148 368, 130 345 C112 322, 120 295, 145 298 C170 301, 195 355, 205 400Z"
+              fill="url(#leafGrad1)" filter="url(#stemGlow)"/>
+        <!-- Leaf veins -->
+        <path class="vein" style="--vein-delay:3.3s" d="M205 400 C185 375, 148 368, 130 345"
+              stroke="#2d5228" stroke-width="1.2" fill="none" opacity="0.6"/>
+        <path class="vein" style="--vein-delay:3.5s" d="M185 378 C178 370, 168 368, 158 363"
+              stroke="#2d5228" stroke-width="0.8" fill="none" opacity="0.4"/>
+        <path class="vein" style="--vein-delay:3.7s" d="M170 362 C165 356, 155 355, 148 350"
+              stroke="#2d5228" stroke-width="0.7" fill="none" opacity="0.4"/>
+        <!-- Leaf sheen overlay -->
+        <path d="M205 400 C185 375, 148 368, 130 345 C112 322, 120 295, 145 298 C170 301, 195 355, 205 400Z"
+              fill="url(#leafSheen)" opacity="0.5"/>
+      </g>
+
+      <!-- Leaf 2 - large right lower -->
+      <g id="leaf2" class="leaf-group leaf-sway-right" style="transform-origin:212px 420px">
+        <path d="M212 420 C232 395, 268 390, 288 366 C308 342, 298 314, 273 317 C248 320, 220 375, 212 420Z"
+              fill="url(#leafGrad2)" filter="url(#stemGlow)"/>
+        <path class="vein" style="--vein-delay:3.6s" d="M212 420 C232 395, 268 390, 288 366"
+              stroke="#2d5228" stroke-width="1.2" fill="none" opacity="0.6"/>
+        <path class="vein" style="--vein-delay:3.8s" d="M232 398 C240 390, 250 388, 260 383"
+              stroke="#2d5228" stroke-width="0.8" fill="none" opacity="0.4"/>
+        <path d="M212 420 C232 395, 268 390, 288 366 C308 342, 298 314, 273 317 C248 320, 220 375, 212 420Z"
+              fill="url(#leafSheen)" opacity="0.5"/>
+      </g>
+
+      <!-- Leaf 3 - mid left -->
+      <g id="leaf3" class="leaf-group leaf-sway-left2" style="transform-origin:208px 305px">
+        <path d="M208 305 C192 288, 162 284, 148 268 C134 252, 140 233, 158 236 C176 239, 200 272, 208 305Z"
+              fill="url(#leafGrad1)" filter="url(#stemGlow)"/>
+        <path class="vein" style="--vein-delay:4s" d="M208 305 C192 288, 162 284, 148 268"
+              stroke="#2d5228" stroke-width="1" fill="none" opacity="0.6"/>
+        <path d="M208 305 C192 288, 162 284, 148 268 C134 252, 140 233, 158 236 C176 239, 200 272, 208 305Z"
+              fill="url(#leafSheen)" opacity="0.4"/>
+      </g>
+
+      <!-- Leaf 4 - mid right -->
+      <g id="leaf4" class="leaf-group leaf-sway-right2" style="transform-origin:213px 330px">
+        <path d="M213 330 C228 314, 255 311, 268 296 C281 281, 275 261, 258 264 C241 267, 218 305, 213 330Z"
+              fill="url(#leafGrad2)" filter="url(#stemGlow)"/>
+        <path class="vein" style="--vein-delay:4.4s" d="M213 330 C228 314, 255 311, 268 296"
+              stroke="#2d5228" stroke-width="1" fill="none" opacity="0.6"/>
+        <path d="M213 330 C228 314, 255 311, 268 296 C281 281, 275 261, 258 264 C241 267, 218 305, 213 330Z"
+              fill="url(#leafSheen)" opacity="0.4"/>
+      </g>
+
+      <!-- SIDE BUDS -->
+      <!-- Left side bud -->
+      <g class="side-bud" style="--sb-delay:5.2s; transform-origin:158px 278px">
+        <ellipse cx="158" cy="275" rx="7" ry="11" fill="#d4607a" opacity="0.9"/>
+        <path d="M154 281 C148 272, 152 263, 158 261 C164 259, 168 268, 162 278Z"
+              fill="#f5b8cc" opacity="0.8"/>
+        <line x1="158" y1="281" x2="158" y2="295" stroke="url(#stemGrad)" stroke-width="3" stroke-linecap="round"/>
+      </g>
+      <!-- Right side bud -->
+      <g class="side-bud" style="--sb-delay:5.6s; transform-origin:258px 332px">
+        <ellipse cx="258" cy="329" rx="6" ry="9" fill="#c0536a" opacity="0.9"/>
+        <path d="M254 334 C248 326, 252 318, 258 316 C264 314, 268 322, 262 332Z"
+              fill="#f5b8cc" opacity="0.8"/>
+        <line x1="258" y1="334" x2="258" y2="345" stroke="url(#stemGrad)" stroke-width="3" stroke-linecap="round"/>
+      </g>
+
+      <!-- FLOWER HEAD -->
+      <g id="flowerHead">
+
+        <!-- Aura glow behind flower -->
+        <g id="flowerAura">
+          <circle id="auraCircle" cx="210" cy="140" r="72" fill="url(#auraGrad)"/>
+          <circle cx="210" cy="140" r="55" fill="none" stroke="#f5b8cc" stroke-width="1" opacity="0.2"
+            style="animation: auraPulse2 4s ease-in-out 10s infinite"/>
+        </g>
+
+        <!-- BUD (visible before petals bloom) -->
+        <g id="budGroup">
+          <ellipse cx="210" cy="148" rx="16" ry="24" fill="#c0536a" opacity="0.9"/>
+          <path d="M197 155 C200 140, 208 132, 210 128 C212 132, 220 140, 223 155Z"
+                fill="#f5b8cc" opacity="0.7"/>
+          <path d="M203 158 C200 145, 205 135, 210 130 C215 135, 220 145, 218 158Z"
+                fill="#fde8ef" opacity="0.5"/>
+        </g>
+
+        <!-- OUTER PETALS (8 petals) -->
+        <!-- P1 -->
+        <g class="petal-outer" style="--base-rot:0deg;--bloom-delay:5.8s;--sway-dir:4deg">
+          <path d="M210 140 C222 120, 238 88, 225 58 C218 40, 202 38, 196 55 C185 78, 198 118, 210 140Z"
+                fill="url(#petalOuter1)" filter="url(#petalGlow)"/>
+          <path d="M210 140 C220 122, 232 96, 222 68 C217 50, 205 46, 200 60 C192 80, 202 120, 210 140Z"
+                fill="url(#petalOuter2)" opacity="0.5"/>
+          <!-- Petal vein -->
+          <line class="vein" style="--vein-delay:6.5s" x1="210" y1="135" x2="212" y2="65"
+                stroke="#d4607a" stroke-width="0.8" opacity="0.35"/>
+        </g>
+        <!-- P2 -->
+        <g class="petal-outer" style="--base-rot:45deg;--bloom-delay:6.0s;--sway-dir:-3deg">
+          <path d="M210 140 C222 120, 238 88, 225 58 C218 40, 202 38, 196 55 C185 78, 198 118, 210 140Z"
+                fill="url(#petalOuter1)" filter="url(#petalGlow)"/>
+          <path d="M210 140 C220 122, 232 96, 222 68 C217 50, 205 46, 200 60 C192 80, 202 120, 210 140Z"
+                fill="url(#petalOuter2)" opacity="0.5"/>
+          <line class="vein" style="--vein-delay:6.7s" x1="210" y1="135" x2="212" y2="65"
+                stroke="#d4607a" stroke-width="0.8" opacity="0.35"/>
+        </g>
+        <!-- P3 -->
+        <g class="petal-outer" style="--base-rot:90deg;--bloom-delay:6.2s;--sway-dir:4deg">
+          <path d="M210 140 C222 120, 238 88, 225 58 C218 40, 202 38, 196 55 C185 78, 198 118, 210 140Z"
+                fill="url(#petalOuter1)" filter="url(#petalGlow)"/>
+          <path d="M210 140 C220 122, 232 96, 222 68 C217 50, 205 46, 200 60 C192 80, 202 120, 210 140Z"
+                fill="url(#petalOuter2)" opacity="0.5"/>
+          <line class="vein" style="--vein-delay:6.9s" x1="210" y1="135" x2="212" y2="65"
+                stroke="#d4607a" stroke-width="0.8" opacity="0.35"/>
+        </g>
+        <!-- P4 -->
+        <g class="petal-outer" style="--base-rot:135deg;--bloom-delay:6.4s;--sway-dir:-3deg">
+          <path d="M210 140 C222 120, 238 88, 225 58 C218 40, 202 38, 196 55 C185 78, 198 118, 210 140Z"
+                fill="url(#petalOuter1)" filter="url(#petalGlow)"/>
+          <path d="M210 140 C220 122, 232 96, 222 68 C217 50, 205 46, 200 60 C192 80, 202 120, 210 140Z"
+                fill="url(#petalOuter2)" opacity="0.5"/>
+          <line class="vein" style="--vein-delay:7.1s" x1="210" y1="135" x2="212" y2="65"
+                stroke="#d4607a" stroke-width="0.8" opacity="0.35"/>
+        </g>
+        <!-- P5 -->
+        <g class="petal-outer" style="--base-rot:180deg;--bloom-delay:6.1s;--sway-dir:3deg">
+          <path d="M210 140 C222 120, 238 88, 225 58 C218 40, 202 38, 196 55 C185 78, 198 118, 210 140Z"
+                fill="url(#petalOuter1)" filter="url(#petalGlow)"/>
+          <path d="M210 140 C220 122, 232 96, 222 68 C217 50, 205 46, 200 60 C192 80, 202 120, 210 140Z"
+                fill="url(#petalOuter2)" opacity="0.5"/>
+        </g>
+        <!-- P6 -->
+        <g class="petal-outer" style="--base-rot:225deg;--bloom-delay:6.3s;--sway-dir:-4deg">
+          <path d="M210 140 C222 120, 238 88, 225 58 C218 40, 202 38, 196 55 C185 78, 198 118, 210 140Z"
+                fill="url(#petalOuter1)" filter="url(#petalGlow)"/>
+          <path d="M210 140 C220 122, 232 96, 222 68 C217 50, 205 46, 200 60 C192 80, 202 120, 210 140Z"
+                fill="url(#petalOuter2)" opacity="0.5"/>
+        </g>
+        <!-- P7 -->
+        <g class="petal-outer" style="--base-rot:270deg;--bloom-delay:6.5s;--sway-dir:4deg">
+          <path d="M210 140 C222 120, 238 88, 225 58 C218 40, 202 38, 196 55 C185 78, 198 118, 210 140Z"
+                fill="url(#petalOuter1)" filter="url(#petalGlow)"/>
+          <path d="M210 140 C220 122, 232 96, 222 68 C217 50, 205 46, 200 60 C192 80, 202 120, 210 140Z"
+                fill="url(#petalOuter2)" opacity="0.5"/>
+        </g>
+        <!-- P8 -->
+        <g class="petal-outer" style="--base-rot:315deg;--bloom-delay:6.7s;--sway-dir:-3deg">
+          <path d="M210 140 C222 120, 238 88, 225 58 C218 40, 202 38, 196 55 C185 78, 198 118, 210 140Z"
+                fill="url(#petalOuter1)" filter="url(#petalGlow)"/>
+          <path d="M210 140 C220 122, 232 96, 222 68 C217 50, 205 46, 200 60 C192 80, 202 120, 210 140Z"
+                fill="url(#petalOuter2)" opacity="0.5"/>
+        </g>
+
+        <!-- INNER PETALS (8 petals, offset 22.5deg, slightly smaller) -->
+        <g class="petal-inner" style="--base-rot:22deg;--bloom-delay-inner:7s;--sway-dir:3deg">
+          <path d="M210 143 C220 126, 232 100, 222 74 C217 58, 205 56, 200 70 C193 92, 203 124, 210 143Z"
+                fill="url(#petalInnerGrad)" filter="url(#petalGlow)"/>
+        </g>
+        <g class="petal-inner" style="--base-rot:67deg;--bloom-delay-inner:7.15s;--sway-dir:-3deg">
+          <path d="M210 143 C220 126, 232 100, 222 74 C217 58, 205 56, 200 70 C193 92, 203 124, 210 143Z"
+                fill="url(#petalInnerGrad)" filter="url(#petalGlow)"/>
+        </g>
+        <g class="petal-inner" style="--base-rot:112deg;--bloom-delay-inner:7.3s;--sway-dir:3deg">
+          <path d="M210 143 C220 126, 232 100, 222 74 C217 58, 205 56, 200 70 C193 92, 203 124, 210 143Z"
+                fill="url(#petalInnerGrad)" filter="url(#petalGlow)"/>
+        </g>
+        <g class="petal-inner" style="--base-rot:157deg;--bloom-delay-inner:7.45s;--sway-dir:-3deg">
+          <path d="M210 143 C220 126, 232 100, 222 74 C217 58, 205 56, 200 70 C193 92, 203 124, 210 143Z"
+                fill="url(#petalInnerGrad)" filter="url(#petalGlow)"/>
+        </g>
+        <g class="petal-inner" style="--base-rot:202deg;--bloom-delay-inner:7.6s;--sway-dir:3deg">
+          <path d="M210 143 C220 126, 232 100, 222 74 C217 58, 205 56, 200 70 C193 92, 203 124, 210 143Z"
+                fill="url(#petalInnerGrad)" filter="url(#petalGlow)"/>
+        </g>
+        <g class="petal-inner" style="--base-rot:247deg;--bloom-delay-inner:7.75s;--sway-dir:-3deg">
+          <path d="M210 143 C220 126, 232 100, 222 74 C217 58, 205 56, 200 70 C193 92, 203 124, 210 143Z"
+                fill="url(#petalInnerGrad)" filter="url(#petalGlow)"/>
+        </g>
+        <g class="petal-inner" style="--base-rot:292deg;--bloom-delay-inner:7.9s;--sway-dir:3deg">
+          <path d="M210 143 C220 126, 232 100, 222 74 C217 58, 205 56, 200 70 C193 92, 203 124, 210 143Z"
+                fill="url(#petalInnerGrad)" filter="url(#petalGlow)"/>
+        </g>
+        <g class="petal-inner" style="--base-rot:337deg;--bloom-delay-inner:8.05s;--sway-dir:-3deg">
+          <path d="M210 143 C220 126, 232 100, 222 74 C217 58, 205 56, 200 70 C193 92, 203 124, 210 143Z"
+                fill="url(#petalInnerGrad)" filter="url(#petalGlow)"/>
+        </g>
+
+        <!-- FLOWER CENTER -->
+        <g id="flowerCenter">
+          <!-- Center disk -->
+          <circle cx="210" cy="140" r="22" fill="url(#centerGrad)" filter="url(#softGlow)"/>
+          <circle cx="210" cy="140" r="18" fill="#e8a84a" opacity="0.9"/>
+          <circle cx="210" cy="140" r="13" fill="#d4a030" opacity="0.8"/>
+          <!-- Center texture dots -->
+          <circle cx="206" cy="137" r="1.5" fill="#8a5e2a" opacity="0.6"/>
+          <circle cx="212" cy="136" r="1.5" fill="#8a5e2a" opacity="0.6"/>
+          <circle cx="215" cy="141" r="1.5" fill="#8a5e2a" opacity="0.6"/>
+          <circle cx="210" cy="145" r="1.5" fill="#8a5e2a" opacity="0.6"/>
+          <circle cx="205" cy="143" r="1.5" fill="#8a5e2a" opacity="0.6"/>
+          <circle cx="209" cy="140" r="1.5" fill="#8a5e2a" opacity="0.6"/>
+          <circle cx="213" cy="143" r="1.5" fill="#8a5e2a" opacity="0.5"/>
+          <circle cx="207" cy="144" r="1" fill="#8a5e2a" opacity="0.5"/>
+          <!-- Center highlight -->
+          <circle cx="206" cy="135" r="5" fill="white" opacity="0.18"/>
+        </g>
+
+        <!-- STAMENS -->
+        <!-- 12 stamens -->
+        <g class="stamen" style="--st-delay:8.3s; transform-origin:210px 143px">
+          <line x1="210" y1="122" x2="210" y2="118" stroke="#ffe066" stroke-width="1.5" stroke-linecap="round"/>
+          <circle cx="210" cy="116" r="2.5" fill="#ffe566"/>
+        </g>
+        <g class="stamen" style="--st-delay:8.4s; transform-origin:210px 143px; transform:rotate(30deg)">
+          <line x1="210" y1="122" x2="210" y2="118" stroke="#ffe066" stroke-width="1.5" stroke-linecap="round"/>
+          <circle cx="210" cy="116" r="2.5" fill="#ffe566"/>
+        </g>
+        <g class="stamen" style="--st-delay:8.5s; transform-origin:210px 143px; transform:rotate(60deg)">
+          <line x1="210" y1="122" x2="210" y2="118" stroke="#ffe066" stroke-width="1.5" stroke-linecap="round"/>
+          <circle cx="210" cy="116" r="2.5" fill="#ffd040"/>
+        </g>
+        <g class="stamen" style="--st-delay:8.55s; transform-origin:210px 143px; transform:rotate(90deg)">
+          <line x1="210" y1="122" x2="210" y2="118" stroke="#ffe066" stroke-width="1.5" stroke-linecap="round"/>
+          <circle cx="210" cy="116" r="2.5" fill="#ffe566"/>
+        </g>
+        <g class="stamen" style="--st-delay:8.6s; transform-origin:210px 143px; transform:rotate(120deg)">
+          <line x1="210" y1="122" x2="210" y2="118" stroke="#ffe066" stroke-width="1.5" stroke-linecap="round"/>
+          <circle cx="210" cy="116" r="2.5" fill="#ffe566"/>
+        </g>
+        <g class="stamen" style="--st-delay:8.65s; transform-origin:210px 143px; transform:rotate(150deg)">
+          <line x1="210" y1="122" x2="210" y2="118" stroke="#ffe066" stroke-width="1.5" stroke-linecap="round"/>
+          <circle cx="210" cy="116" r="2.5" fill="#ffd040"/>
+        </g>
+        <g class="stamen" style="--st-delay:8.7s; transform-origin:210px 143px; transform:rotate(180deg)">
+          <line x1="210" y1="122" x2="210" y2="118" stroke="#ffe066" stroke-width="1.5" stroke-linecap="round"/>
+          <circle cx="210" cy="116" r="2.5" fill="#ffe566"/>
+        </g>
+        <g class="stamen" style="--st-delay:8.75s; transform-origin:210px 143px; transform:rotate(210deg)">
+          <line x1="210" y1="122" x2="210" y2="118" stroke="#ffe066" stroke-width="1.5" stroke-linecap="round"/>
+          <circle cx="210" cy="116" r="2.5" fill="#ffe566"/>
+        </g>
+        <g class="stamen" style="--st-delay:8.8s; transform-origin:210px 143px; transform:rotate(240deg)">
+          <line x1="210" y1="122" x2="210" y2="118" stroke="#ffe066" stroke-width="1.5" stroke-linecap="round"/>
+          <circle cx="210" cy="116" r="2.5" fill="#ffd040"/>
+        </g>
+        <g class="stamen" style="--st-delay:8.85s; transform-origin:210px 143px; transform:rotate(270deg)">
+          <line x1="210" y1="122" x2="210" y2="118" stroke="#ffe066" stroke-width="1.5" stroke-linecap="round"/>
+          <circle cx="210" cy="116" r="2.5" fill="#ffe566"/>
+        </g>
+        <g class="stamen" style="--st-delay:8.9s; transform-origin:210px 143px; transform:rotate(300deg)">
+          <line x1="210" y1="122" x2="210" y2="118" stroke="#ffe066" stroke-width="1.5" stroke-linecap="round"/>
+          <circle cx="210" cy="116" r="2.5" fill="#ffe566"/>
+        </g>
+        <g class="stamen" style="--st-delay:8.95s; transform-origin:210px 143px; transform:rotate(330deg)">
+          <line x1="210" y1="122" x2="210" y2="118" stroke="#ffe066" stroke-width="1.5" stroke-linecap="round"/>
+          <circle cx="210" cy="116" r="2.5" fill="#ffd040"/>
+        </g>
+
+        <!-- DEW DROPS on petals -->
+        <circle class="dew" style="--dew-delay:8.8s;--dew-r:3" cx="228" cy="105" r="0" fill="url(#dewGrad)"/>
+        <circle class="dew" style="--dew-delay:9.0s;--dew-r:2.5" cx="195" cy="98" r="0" fill="url(#dewGrad)"/>
+        <circle class="dew" style="--dew-delay:9.2s;--dew-r:2" cx="243" cy="130" r="0" fill="url(#dewGrad)"/>
+        <circle class="dew" style="--dew-delay:9.4s;--dew-r:2" cx="177" cy="128" r="0" fill="url(#dewGrad)"/>
+
+      </g><!-- /flowerHead -->
+
+      <!-- SVG Sparkles -->
+      <g class="sparkle" style="--sp-dur:2.5s;--sp-delay:8.5s; left:0;top:0">
+        <path d="M180 80 L183 88 L191 91 L183 94 L180 102 L177 94 L169 91 L177 88Z"
+              fill="#fde8ef" opacity="0.9"/>
+      </g>
+      <g class="sparkle" style="--sp-dur:3s;--sp-delay:9.0s; left:0;top:0">
+        <path d="M245 70 L247 76 L253 78 L247 80 L245 86 L243 80 L237 78 L243 76Z"
+              fill="#ffe0a0" opacity="0.9"/>
+      </g>
+      <g class="sparkle" style="--sp-dur:2s;--sp-delay:9.5s; left:0;top:0">
+        <path d="M165 115 L167 120 L172 122 L167 124 L165 129 L163 124 L158 122 L163 120Z"
+              fill="#f5b8cc" opacity="0.85"/>
+      </g>
+      <g class="sparkle" style="--sp-dur:2.8s;--sp-delay:10s; left:0;top:0">
+        <path d="M258 110 L260 115 L265 117 L260 119 L258 124 L256 119 L251 117 L256 115Z"
+              fill="#fde8ef" opacity="0.8"/>
+      </g>
+
+    </svg>
+  </div>
+
+  <!-- Text Message -->
+  <div class="message-wrap">
+    <div class="message-line msg1">สู้ๆๆน้าคนเก่งชองพี่</div>
+    <div class="message-line msg2">คนเก่งของพี่สู้ๆๆ เดี่ยวเราก็ผ่านมันไปได้</div>
+    <div class="message-line msg3">แต่ยังไงก็จะมีพี่คอยอยู่ข้างๆๆเสมอนะ</div>
+  </div>
+</div>
+
+<script>
+  // Generate stars
+  const starsContainer = document.getElementById('starsContainer');
+  for (let i = 0; i < 160; i++) {
+    const star = document.createElement('div');
+    star.className = 'star';
+    const size = Math.random() * 2.5 + 0.5;
+    star.style.cssText = `
+      width: ${size}px; height: ${size}px;
+      left: ${Math.random() * 100}%;
+      top: ${Math.random() * 85}%;
+      --dur: ${2 + Math.random() * 4}s;
+      --delay: ${Math.random() * 5}s;
+      --min-op: ${0.1 + Math.random() * 0.2};
+      --max-op: ${0.6 + Math.random() * 0.4};
+    `;
+    starsContainer.appendChild(star);
+  }
+
+  // Generate background falling petals
+  const bgPetals = document.getElementById('bgPetals');
+  for (let i = 0; i < 22; i++) {
+    const petal = document.createElement('div');
+    petal.className = 'bg-petal';
+    const size = 10 + Math.random() * 22;
+    const drift = (Math.random() - 0.5) * 200;
+    const spin = (Math.random() - 0.5) * 720;
+    petal.style.cssText = `
+      left: ${Math.random() * 105 - 2}%;
+      --size: ${size}px;
+      --fall-dur: ${10 + Math.random() * 10}s;
+      --fall-delay: ${Math.random() * 15}s;
+      --drift: ${drift}px;
+      --spin: ${spin}deg;
+    `;
+    bgPetals.appendChild(petal);
+  }
+
+  // Floating hearts near flower
+  const scene = document.querySelector('.scene');
+  const heartSymbols = ['&hearts;', '&hearts;', '&hearts;'];
+  for (let i = 0; i < 7; i++) {
+    const heart = document.createElement('div');
+    heart.className = 'heart';
+    heart.innerHTML = '&hearts;';
+    const size = 10 + Math.random() * 12;
+    const left = 35 + Math.random() * 30;
+    const bottom = 120 + Math.random() * 100;
+    const drift = (Math.random() - 0.5) * 80;
+    heart.style.cssText = `
+      left: ${left}%;
+      bottom: ${bottom}px;
+      --heart-size: ${size}px;
+      --h-dur: ${3 + Math.random() * 3}s;
+      --h-delay: ${9 + Math.random() * 5}s;
+      --h-drift: ${drift}px;
+    `;
+    scene.appendChild(heart);
+  }
+
+  // Hide bud when petals start blooming
+  setTimeout(() => {
+    const bud = document.getElementById('budGroup');
+    bud.style.transition = 'opacity 1s ease-out';
+    bud.style.opacity = '0';
+  }, 5800);
+
+  // Play background music with autoplay
+  const bgMusic = document.getElementById('bgMusic');
+  bgMusic.volume = 0.5; // ตั้งระดับเสียงที่ 50%
   
-  <script>
-    // Create floating petals
-    function createPetals() {
-      const petalsContainer = document.getElementById('petals-container');
-      const numPetals = 30;
-      
-      for (let i = 0; i < numPetals; i++) {
-        const petal = document.createElement('div');
-        petal.className = 'floating-petal';
-        
-        // Random position, size, color and delay
-        const size = Math.random() * 10 + 10;
-        const left = Math.random() * 100;
-        const delay = Math.random() * 10;
-        const duration = Math.random() * 10 + 10;
-        const color = `hsl(${330 + Math.random() * 30}, ${80 + Math.random() * 20}%, ${80 + Math.random() * 15}%)`;
-        
-        petal.style.width = `${size}px`;
-        petal.style.height = `${size}px`;
-        petal.style.left = `${left}%`;
-        petal.style.top = '0';
-        petal.style.background = color;
-        petal.style.animationDelay = `${delay}s`;
-        petal.style.animationDuration = `${duration}s`;
-        
-        petalsContainer.appendChild(petal);
-      }
+  // ฟังก์ชันเล่นเพลง
+  const playAudio = () => {
+    bgMusic.muted = false;
+    const playPromise = bgMusic.play();
+    if (playPromise !== undefined) {
+      playPromise.catch(err => {
+        console.log('Play failed:', err);
+      });
     }
-    
-    // Create falling hearts
-    function createFallingHearts() {
-      const heartContainer = document.getElementById('heart-container');
-      heartContainer.classList.add('active');
-      
-      // Create 30 hearts
-      const numHearts = 30;
-      const colors = ['pink-heart', 'red-heart', 'white-heart'];
-      
-      for (let i = 0; i < numHearts; i++) {
-        setTimeout(() => {
-          const heart = document.createElement('div');
-          heart.className = `falling-heart ${colors[Math.floor(Math.random() * colors.length)]}`;
-          
-          // Random position and animation
-          const left = Math.random() * 100;
-          const duration = Math.random() * 5 + 3;
-          const delay = Math.random() * 1;
-          const size = Math.random() * 20 + 10;
-          
-          heart.style.left = `${left}%`;
-          heart.style.animation = `fall ${duration}s linear ${delay}s forwards`;
-          heart.style.width = `${size}px`;
-          heart.style.height = `${size}px`;
-          
-          // Add heart shape
-          const heartShape = document.createElement('div');
-          heartShape.className = 'heart-shape';
-          heart.appendChild(heartShape);
-          
-          heartContainer.appendChild(heart);
-          
-          // Remove heart after animation completes
-          setTimeout(() => {
-            heartContainer.removeChild(heart);
-          }, (duration + delay) * 1000);
-        }, i * 300);
-      }
-    }
-    
-    // Show message
-    function showMessage() {
-      document.getElementById('message').classList.add('visible');
-      document.getElementById('main-tulip').style.display = 'none';
-      createFallingHearts();
-    }
-    
-    // Close message
-    function closeMessage() {
-      document.getElementById('message').classList.remove('visible');
-      document.getElementById('heart-container').classList.remove('active');
-      
-      setTimeout(() => {
-        document.getElementById('message').style.display = 'none';
-        document.getElementById('main-tulip').style.display = 'block';
-      }, 500);
-    }
-    
-    // Initialize
-    window.onload = function() {
-      createPetals();
+  };
+  
+  // ลองเล่นอัตโนมัติ
+  playAudio();
+  
+  // ถ้าเล่นไม่ได้ ให้เพิ่มปุ่ม
+  bgMusic.addEventListener('error', (e) => {
+    console.log('Audio error:', e);
+    addPlayButton();
+  });
+  
+  // เพิ่มปุ่มเล่นเป็น fallback
+  const addPlayButton = () => {
+    const playBtn = document.createElement('button');
+    playBtn.innerHTML = '🎵 เล่นเพลง';
+    playBtn.style.cssText = `
+      position: fixed;
+      bottom: 20px; right: 20px;
+      z-index: 30;
+      padding: 12px 18px;
+      background: rgba(232, 120, 154, 0.9);
+      color: white;
+      border: none;
+      border-radius: 25px;
+      cursor: pointer;
+      font-size: 14px;
+      font-family: 'Cormorant Garamond', serif;
+      backdrop-filter: blur(10px);
+      box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+    `;
+    playBtn.onmouseover = () => playBtn.style.background = 'rgba(232, 120, 154, 1)';
+    playBtn.onmouseout = () => playBtn.style.background = 'rgba(232, 120, 154, 0.9)';
+    playBtn.onclick = () => {
+      playAudio();
+      playBtn.style.display = 'none';
     };
-  </script>
+    if (!document.querySelector('button[type="play"]')) {
+      document.body.appendChild(playBtn);
+    }
+  };
+  
+  // รอสักครู่แล้วเพิ่มปุ่มเพื่อให้ผู้ใช้มีตัวเลือก
+  setTimeout(() => {
+    if (bgMusic.paused) {
+      addPlayButton();
+    }
+  }, 2000);
+</script>
 </body>
 </html>
